@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Hej Karolina 💌</title>
+  <meta name="description" content="Hej Karolina, co powiesz na randkę w niedzielę?">
+  <!-- Open Graph: podgląd linku w komunikatorach -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hej Karolina 💌">
+  <meta property="og:description" content="Co powiesz na randkę w niedzielę?">
+  <meta property="og:locale" content="pl_PL">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Hej Karolina 💌">
+  <meta name="twitter:description" content="Co powiesz na randkę w niedzielę?">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -113,6 +122,18 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
+    .btn-back {
+      background: transparent;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 500;
+      min-height: 44px;
+      padding: 12px 22px;
+      border-radius: 14px;
+      box-shadow: none;
+    }
+    .btn-back:active { transform: scale(0.96); }
+
     /* faza ucieczki: przycisk staje się pływający */
     .btn-no.running {
       position: fixed;
@@ -210,8 +231,9 @@
     <div class="thanks-emoji">🥰</div>
     <div>
       <p class="thanks-text">No to jakoś tak 17:00, 18:00, 19:00,<br>bądźmy w kontakcie.</p>
-      <p class="thanks-sub">Do zobaczenia w niedzielę! 💌</p>
+      <p class="thanks-sub">Umówmy się — do zobaczenia w niedzielę! 💌</p>
     </div>
+    <button class="btn-back" id="back">← Wróć</button>
   </main>
 
   <script>
@@ -235,6 +257,12 @@
     document.getElementById('yes').addEventListener('click', () => {
       document.getElementById('ask').classList.add('hidden');
       document.getElementById('thanks').classList.remove('hidden');
+    });
+
+    // --- powrót do ekranu z pytaniem ---
+    document.getElementById('back').addEventListener('click', () => {
+      document.getElementById('thanks').classList.add('hidden');
+      document.getElementById('ask').classList.remove('hidden');
     });
 
     // --- maszyna stanów przycisku odmowy ---
