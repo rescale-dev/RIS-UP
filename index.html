@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Hej Natalia 💌</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --pink: #ff5d8f;
+      --pink-dark: #e84875;
+      --bg-1: #ffe3ec;
+      --bg-2: #ffd1dc;
+      --text: #4a2c38;
+      --muted: #9b8089;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 24px;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+    }
+
+    /* unoszące się serduszka w tle */
+    .hearts {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hearts span {
+      position: absolute;
+      bottom: -40px;
+      font-size: 20px;
+      opacity: 0;
+      animation: rise linear infinite;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0) scale(0.8); opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.7; }
+      100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+    }
+
+    .screen {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    .screen.hidden { display: none; }
+
+    .question {
+      font-size: clamp(1.6rem, 7vw, 2.4rem);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .question .name { color: var(--pink); }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 18px 24px;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+      min-height: 56px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-yes {
+      background: var(--pink);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(255, 93, 143, 0.45);
+    }
+    .btn-yes:active { transform: scale(0.97); }
+
+    .btn-no {
+      background: #ffffff;
+      color: var(--muted);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    /* faza ucieczki: przycisk staje się pływający */
+    .btn-no.running {
+      position: fixed;
+      z-index: 5;
+      width: auto;
+      transition: top 0.3s ease, left 0.3s ease;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    /* animacja trzęsienia */
+    .shake { animation: shake 0.5s ease; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      15% { transform: translateX(-10px) rotate(-3deg); }
+      30% { transform: translateX(9px) rotate(3deg); }
+      45% { transform: translateX(-8px) rotate(-2deg); }
+      60% { transform: translateX(7px) rotate(2deg); }
+      75% { transform: translateX(-4px); }
+    }
+
+    /* dymek z tekstem */
+    .bubble {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 14px);
+      transform: translateX(-50%) scale(0.8);
+      background: var(--text);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 10px 16px;
+      border-radius: 14px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 10;
+    }
+    .bubble::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 7px solid transparent;
+      border-top-color: var(--text);
+    }
+    .bubble.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .no-wrap { position: relative; }
+
+    /* ekran podziękowania */
+    .thanks-emoji {
+      font-size: clamp(3.5rem, 18vw, 6rem);
+      animation: pop 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+    @keyframes pop {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .thanks-text {
+      font-size: clamp(1.3rem, 6vw, 1.9rem);
+      font-weight: 600;
+      line-height: 1.45;
+    }
+    .thanks-sub {
+      margin-top: 12px;
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <!-- Ekran 1: pytanie -->
+  <main class="screen" id="ask">
+    <h1 class="question">Hej <span class="name">Natalia</span>, co powiesz na randkę w niedzielę?</h1>
+    <div class="buttons">
+      <button class="btn-yes" id="yes">Zgadzam się 💕</button>
+      <div class="no-wrap">
+        <span class="bubble" id="bubble"></span>
+        <button class="btn-no" id="no">Sorry, ale nie mogę.</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Ekran 2: podziękowanie -->
+  <main class="screen hidden" id="thanks">
+    <div class="thanks-emoji">🥰</div>
+    <div>
+      <p class="thanks-text">No to jakoś tak 17:00, 18:00, 19:00,<br>bądźmy w kontakcie.</p>
+      <p class="thanks-sub">Do zobaczenia w niedzielę! 💌</p>
+    </div>
+  </main>
+
+  <script>
+    // --- unoszące się serduszka w tle ---
+    (function spawnHearts() {
+      const container = document.getElementById('hearts');
+      const emojis = ['💕', '💖', '💗', '💝', '❤️'];
+      const count = 14;
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement('span');
+        s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        s.style.left = Math.random() * 100 + 'vw';
+        s.style.fontSize = (14 + Math.random() * 20) + 'px';
+        s.style.animationDuration = (8 + Math.random() * 8) + 's';
+        s.style.animationDelay = (Math.random() * 8) + 's';
+        container.appendChild(s);
+      }
+    })();
+
+    // --- ekran podziękowania po "Zgadzam się" ---
+    document.getElementById('yes').addEventListener('click', () => {
+      document.getElementById('ask').classList.add('hidden');
+      document.getElementById('thanks').classList.remove('hidden');
+    });
+
+    // --- maszyna stanów przycisku odmowy ---
+    const noBtn = document.getElementById('no');
+    const bubble = document.getElementById('bubble');
+    let noClicks = 0;
+    let bubbleTimer = null;
+
+    function showBubble(text) {
+      clearTimeout(bubbleTimer);
+      bubble.textContent = text;
+      bubble.classList.add('show');
+      bubbleTimer = setTimeout(() => bubble.classList.remove('show'), 2200);
+    }
+
+    function shake() {
+      noBtn.classList.remove('shake');
+      void noBtn.offsetWidth; // restart animacji
+      noBtn.classList.add('shake');
+    }
+
+    function moveAway() {
+      const w = noBtn.offsetWidth;
+      const h = noBtn.offsetHeight;
+      const margin = 12;
+      const maxLeft = window.innerWidth - w - margin;
+      const maxTop = window.innerHeight - h - margin;
+      const left = margin + Math.random() * Math.max(0, maxLeft - margin);
+      const top = margin + Math.random() * Math.max(0, maxTop - margin);
+      noBtn.style.left = left + 'px';
+      noBtn.style.top = top + 'px';
+    }
+
+    function handleNo() {
+      noClicks++;
+      if (noClicks === 1) {
+        shake();
+        showBubble('Jesteś pewna?');
+      } else if (noClicks === 2) {
+        shake();
+        showBubble('Przemyśl to.');
+      } else {
+        // stan 3+: przycisk ucieka
+        if (!noBtn.classList.contains('running')) {
+          // zamroź aktualny rozmiar/pozycję, potem przełącz na fixed
+          noBtn.classList.add('running');
+          bubble.classList.remove('show');
+        }
+        moveAway();
+      }
+    }
+
+    // klik oraz najechanie/dotyk w fazie ucieczki
+    noBtn.addEventListener('click', handleNo);
+    noBtn.addEventListener('mouseenter', () => {
+      if (noBtn.classList.contains('running')) moveAway();
+    });
+    noBtn.addEventListener('touchstart', (e) => {
+      if (noBtn.classList.contains('running')) {
+        e.preventDefault();
+        moveAway();
+      }
+    }, { passive: false });
+
+    // jeśli zmieni się rozmiar okna podczas ucieczki — utrzymaj w granicach
+    window.addEventListener('resize', () => {
+      if (noBtn.classList.contains('running')) moveAway();
+    });
+  </script>
+</body>
+</html>
